@@ -1,26 +1,32 @@
 import { useCallback } from "react";
-import { useTodo } from "../provider/ToDoContext";
+// import { useTodo } from "../provider/ToDoContext";
 import { useSelector, useDispatch } from "react-redux";
-import { inputText, inputError, inputZero, inputDeleteError } from "../redux/actions/inputTextActions";
+import {
+  inputText,
+  inputError,
+  inputZero,
+  inputDeleteError,
+} from "../redux/actions/inputTextActions";
+import { addTitle } from "../redux/actions/tasksActions";
 
 const InputTask = () => {
-  const { addTask } = useTodo();
+  // const { addTask } = useTodo();
   // const [text, setText] = useState("");
   // const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const {inputValue, errorSpace} = useSelector((store) => store.text);
+  const { inputValue, errorSpace } = useSelector((store) => store.text);
 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
       if (!inputValue.trim()) {
         dispatch(inputError());
-        return
+        return;
       }
-      addTask(inputValue);
+      dispatch(addTitle(inputValue));
       dispatch(inputZero());
     },
-    [addTask, dispatch, inputValue],
+    [dispatch, inputValue],
   );
 
   const handleChange = (text) => {

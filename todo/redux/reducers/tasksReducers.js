@@ -1,10 +1,10 @@
 const initialValue = {
   taskValue: [],
-  filteredTask: [],
+  filteredTask: ['asd'],
   error: "",
 };
 
-const inputTextReducer = (state = initialValue, action) => {
+const tasksReducer = (state = initialValue, action) => {
   switch (action.type) {
     case "errorMessage": //выбросить только ошибку
       return {
@@ -16,11 +16,11 @@ const inputTextReducer = (state = initialValue, action) => {
         ...state,
         error: "",
       };
-      case 'fetchTasks'://загрузка тасок с LS
-        return {
-          ...state,
-          taskValue: action.payload
-        }
+    case "fetchTasks": //загрузка тасок с LS
+      return {
+        ...state,
+        taskValue: action.payload,
+      };
     case "addTitle":
       return {
         ...state,
@@ -51,27 +51,22 @@ const inputTextReducer = (state = initialValue, action) => {
             : task,
         ),
       };
-      case 'clearCompetedTask':
-        return{
-          ...state,
-          taskValue: state.taskValue.filter((task) => !task.isDone)
-        }
-        case 'filterTasks':
-          return{
-            ...state,
-            filteredTask: []
-            // switch (filter) {
-            //       case "active":
-            //         return tasks.filter((item) => !item.isDone);
-            //       case "completed":
-            //         return tasks.filter((item) => item.isDone);
-            //       default:
-            //         return tasks;
-            //     }
-          }
+    case "clearCompetedTask":
+      return {
+        ...state,
+        taskValue: state.taskValue.filter((task) => !task.isDone),
+      };
+    case "filterTasks":
+      return {
+        ...state,
+        filteredTask: ()=>{
+          
+        },
+        
+      };
     default:
       return state;
   }
 };
 
-export default inputTextReducer;
+export default tasksReducer;

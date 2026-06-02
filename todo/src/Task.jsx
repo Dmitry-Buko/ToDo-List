@@ -1,10 +1,9 @@
 import { useCallback, useState } from "react";
-import { useTodo } from "../provider/ToDoContext";
+// import { useTodo } from "../provider/ToDoContext";
 import { useDispatch, useSelector } from "react-redux";
-import { errorMessage, setErrorToZero } from "../redux/actions/tasksActions";
+import { deleteTitle, editTitle, errorMessage, setErrorToZero, togglerTask } from "../redux/actions/tasksActions";
 
 const Task = ({ task }) => {
-  const { deleteTask, isDoneToggler, editTask } = useTodo();
 
   const { error } = useSelector((store) => store.tasks);
   const dispatch = useDispatch();
@@ -17,10 +16,10 @@ const Task = ({ task }) => {
       if (!text.trim()) {
         dispatch(errorMessage());
       }
-      editTask(task.id, text);
+      dispatch(editTitle(task.id, text));
       setIsEdit(false);
     },
-    [editTask, task.id, dispatch],
+    [ task.id, dispatch],
   );
 
   const handleKeyDown = (e) => {
@@ -48,7 +47,7 @@ const Task = ({ task }) => {
         type="checkbox"
         className="task__checkbox"
         checked={task.isDone}
-        onChange={() => isDoneToggler(task.id)}
+        onChange={() => dispatch(togglerTask(task.id))}
       />
 
       <div className="task__content">
@@ -83,7 +82,7 @@ const Task = ({ task }) => {
           {isEdit ? "Сохранить ✅" : "Изменить ✍️"}
         </button>
         <button
-          onClick={() => deleteTask(task.id)}
+          onClick={() => dispatch(deleteTitle(task.id))}
           className="task__btn--delete"
         >
           Удалить 🗑

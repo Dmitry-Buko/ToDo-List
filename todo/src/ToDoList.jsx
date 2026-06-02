@@ -3,8 +3,7 @@ import Task from "./Task";
 
 const ToDoList = () => {
   const {taskValue} = useSelector((store) => store.tasks);
-  console.log(taskValue);
-  
+  // console.log(taskValue);
 
   return (
     <div className="tasks-list">
