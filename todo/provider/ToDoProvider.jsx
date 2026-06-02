@@ -1,122 +1,106 @@
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { ToDoContext } from "./ToDoContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addTitle,
+  clearCompetedTask,
+  deleteTitle,
+  editTitle,
+  fetchTasks,
+  filterTasks,
+  togglerTask,
+} from "../redux/actions/tasksActions";
 
 export const ToDoProvider = ({ children }) => {
-  const [tasks, setTasks] = useState(() => {
-    try {
-      const saved = localStorage.getItem("tasks");
-      return saved ? JSON.parse(saved) : [];
-    } catch (e) {
-      console.error("Ошибка загрузки задач:", e);
-      return [];
-    }
-  });
+  // const [tasks, setTasks] = useState(() => {
+  //   try {
+  //     const saved = localStorage.getItem("tasks");
+  //     return saved ? JSON.parse(saved) : [];
+  //   } catch (e) {
+  //     console.error("Ошибка загрузки задач:", e);
+  //     return [];
+  //   }
+  // }); //------------изменить!!!!
   const [filter, setFilter] = useState("all");
+  const dispatch = useDispatch();
+  const taskValue = useSelector((store) => store.tasks.taskValue);
+
+  console.log('taskValue: ', taskValue);
+  
+
+  useEffect(()=>{
+    const savedTasks = localStorage.getItem("tasks");
+    console.log('savedTasks:', JSON.parse(savedTasks));
+    dispatch(fetchTasks(JSON.parse(savedTasks)))
+  },[])
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+    localStorage.setItem("tasks", JSON.stringify(taskValue));
+  }, [taskValue]); //
 
   //кол-во активных
-  const activeCount = useMemo(()=>{
-    let count = 0
-    tasks.forEach(el =>{
-      if(!el.isDone) count++
+  const activeCount = useMemo(() => {
+    let count = 0;
+    taskValue?.forEach((el) => {
+      if (!el.isDone) count++;
     });
-    return count
-  },[tasks])
-  
-  //фильтрация
-  const filteredTasks = useMemo(() => {
-    switch (filter) {
-      case "active":
-        return tasks.filter((item) => !item.isDone);
-      case "completed":
-        return tasks.filter((item) => item.isDone);
-      default:
-        return tasks;
-    }
-  }, [filter, tasks]);
-  //валидация
-  const validateText = useCallback((text) => {
-    const trimmed = text.trim();
-    if (!trimmed) {
-      return { isValid: false, error: "Задача не может быть пустой!" };
-    }
-    return { isValid: true, trimmedText: trimmed };
-  }, []);
-  //добавление задачи
+    return count;
+  }, [taskValue]);
+
+  const filteredTasks = useCallback(() => {
+    dispatch(filterTasks(filter));
+  }, [dispatch, filter]);
+
   const addTask = useCallback(
-    (title, onError) => {
-      const result = validateText(title);
-      if (!result.isValid) {
-        onError?.(result.error);
-        return false;
-      }
-      setTasks((prev) => [
-        ...prev,
-        { id: crypto.randomUUID(), title: result.trimmedText, isDone: false },
-      ]);
-      return true;
+    (title) => {
+      dispatch(addTitle(title));
     },
-    [validateText],
+    [dispatch],
   );
-  //изменение задачи
-  const editTitle = useCallback(
-    (id, newTitle, onError) => {
-      const result = validateText(newTitle);
-      if (!result.isValid) {
-        onError?.(result.error);
-        return false;
-      }
-      setTasks((prev) =>
-        prev.map((task) =>
-          task.id === id ? { ...task, title: result.trimmedText } : task,
-        ),
-      );
-      return true;
+
+  const editTask = useCallback(
+    (id, newTitle) => {
+      dispatch(editTitle(id, newTitle));
     },
-    [validateText],
+    [dispatch],
   );
-  //удаление задачи
-  const deleteTask = useCallback((id) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
-  }, []);
-  //переключатель
-  const isDoneToggler = useCallback((id) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, isDone: !task.isDone } : task,
-      ),
-    );
-  }, []);
-  //очистка выполненных
-  const clearCompeted = useCallback(()=>{
-    setTasks((prev) => prev.filter((task) => !task.isDone));
-  },[])
-  
+
+  const deleteTask = useCallback(
+    (id) => {
+      dispatch(deleteTitle(id));
+    },
+    [dispatch],
+  );
+
+  const isDoneToggler = useCallback(
+    (id) => {
+      dispatch(togglerTask(id));
+    },
+    [dispatch],
+  );
+
+  const clearCompeted = useCallback(() => {
+    dispatch(clearCompetedTask());
+  }, [dispatch]);
+
   const value = useMemo(
     () => ({
-      tasks,
+      // tasks,
       addTask,
       deleteTask,
       isDoneToggler,
-      editTitle,
+      editTask,
       filteredTasks,
-      filter,
-      setFilter,
       activeCount,
       clearCompeted,
     }),
     [
-      tasks,
+      // tasks,
       addTask,
       deleteTask,
       isDoneToggler,
-      editTitle,
+      editTask,
       filteredTasks,
-      filter,
-      setFilter,
       activeCount,
       clearCompeted,
     ],

@@ -1,42 +1,44 @@
 import { useCallback, useState } from "react";
 import { useTodo } from "../provider/ToDoContext";
+import { useDispatch, useSelector } from "react-redux";
+import { errorMessage, setErrorToZero } from "../redux/actions/tasksActions";
 
 const Task = ({ task }) => {
-  const { deleteTask, isDoneToggler, editTitle } = useTodo();
+  const { deleteTask, isDoneToggler, editTask } = useTodo();
+
+  const { error } = useSelector((store) => store.tasks);
+  const dispatch = useDispatch();
 
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState(task.title);
-  const [error, setError] = useState("");
 
-  const validateAndSave = useCallback(
+  const validateAndEditNewTask = useCallback(
     (text) => {
-      const success = editTitle(task.id, text, setError);
-      if (success) {
-        setError("");
-        setIsEdit(false);
-        return true;
+      if (!text.trim()) {
+        dispatch(errorMessage());
       }
-      return false;
+      editTask(task.id, text);
+      setIsEdit(false);
     },
-    [editTitle, task.id],
+    [editTask, task.id, dispatch],
   );
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      validateAndSave(editText);
+      validateAndEditNewTask(editText);
     } else if (e.key === "Escape") {
       setIsEdit(false);
       setEditText(task.title);
-      setError("");
+      dispatch(setErrorToZero());
     }
   };
 
   const toggleEdit = () => {
     if (isEdit) {
-      validateAndSave(editText);
+      validateAndEditNewTask(editText);
     } else {
       setIsEdit(true);
-      setError("");
+      dispatch(setErrorToZero());
     }
   };
 
@@ -56,7 +58,7 @@ const Task = ({ task }) => {
               value={editText}
               onChange={(e) => {
                 setEditText(e.target.value);
-                if (error) setError("");
+                if (error) dispatch(setErrorToZero());
               }}
               onKeyDown={handleKeyDown}
               className={`edit-wrapper__input ${error ? "error" : ""}`}
@@ -70,7 +72,9 @@ const Task = ({ task }) => {
             )}
           </div>
         ) : (
-          <p className={`task__text ${task.isDone ? "done" : ""}`}>{task.title}</p>
+          <p className={`task__text ${task.isDone ? "done" : ""}`}>
+            {task.title}
+          </p>
         )}
       </div>
 
@@ -78,7 +82,10 @@ const Task = ({ task }) => {
         <button onClick={toggleEdit} className="task__btn--edit">
           {isEdit ? "Сохранить ✅" : "Изменить ✍️"}
         </button>
-        <button onClick={() => deleteTask(task.id)} className="task__btn--delete">
+        <button
+          onClick={() => deleteTask(task.id)}
+          className="task__btn--delete"
+        >
           Удалить 🗑
         </button>
       </div>
