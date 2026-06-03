@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-// import { useTodo } from "../provider/ToDoContext";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTitle, editTitle, errorMessage, setErrorToZero, togglerTask } from "../redux/actions/tasksActions";
 
@@ -7,7 +6,6 @@ const Task = ({ task }) => {
 
   const { error } = useSelector((store) => store.tasks);
   const dispatch = useDispatch();
-
   const [isEdit, setIsEdit] = useState(false);
   const [editText, setEditText] = useState(task.title);
 

@@ -1,32 +1,30 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTodo } from "../provider/ToDoContext";
-import { clearCompetedTask } from "../redux/actions/tasksActions";
-import useFiltrationTasks from "../redux/hooks/useFiltrationTasks";
+import { clearCompetedTask, filterTasks } from "../redux/actions/tasksActions";
 
 const FilteredTasks = () => {
-  const { filter, setFilter, activeCount } = useTodo();
+  const { activeCount } = useTodo();
   const dispatch = useDispatch();
-  useFiltrationTasks(filter);
-  console.log("filter:", filter);
+  const { filter } = useSelector((store) => store.tasks);
 
   return (
     <div className="todo__footer">
       <div className="filters">
         <button
           className={`filters__btn ${filter === "all" ? "filters__btn--active" : ""}`}
-          onClick={() => setFilter("all")}
+          onClick={() => dispatch(filterTasks("all"))}
         >
           Все
         </button>
         <button
           className={`filters__btn ${filter === "active" ? "filters__btn--active" : ""}`}
-          onClick={() => setFilter("active")}
+          onClick={() => dispatch(filterTasks("active"))}
         >
           Активные
         </button>
         <button
           className={`filters__btn ${filter === "completed" ? "filters__btn--active" : ""}`}
-          onClick={() => setFilter("completed")}
+          onClick={() => dispatch(filterTasks("completed"))}
         >
           Завершенные
         </button>

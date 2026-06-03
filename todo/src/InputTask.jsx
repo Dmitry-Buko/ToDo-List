@@ -10,9 +10,6 @@ import {
 import { addTitle } from "../redux/actions/tasksActions";
 
 const InputTask = () => {
-  // const { addTask } = useTodo();
-  // const [text, setText] = useState("");
-  // const [error, setError] = useState("");
   const dispatch = useDispatch();
   const { inputValue, errorSpace } = useSelector((store) => store.text);
 

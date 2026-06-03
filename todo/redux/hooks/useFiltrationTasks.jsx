@@ -1,21 +1,22 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
-const useFiltrationTasks = (filter) => {
-  
-  const {taskValue, filteredTask} = useSelector((store) => store.tasks);
-  
-  const filtrationTask = useMemo(() => {
+const useFiltrationTasks = () => {
+  const { taskValue = [], filter = "all" } = useSelector((store) => store.tasks);
+
+  const filteredTasks = useMemo(() => {
     switch (filter) {
       case "active":
-        return taskValue.filter((item) => !item.isDone);
+        return taskValue.filter((task) => !task.isDone);
       case "completed":
-        return taskValue.filter((item) => item.isDone);
+        return taskValue.filter((task) => task.isDone);
+      case "all":
       default:
         return taskValue;
     }
-  },[filter, taskValue]);
+  }, [taskValue, filter]);
 
-  return filtrationTask
+  return filteredTasks;
 };
+
 export default useFiltrationTasks;

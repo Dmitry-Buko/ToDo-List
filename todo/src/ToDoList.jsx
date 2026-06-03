@@ -1,14 +1,13 @@
-import { useSelector } from "react-redux";
 import Task from "./Task";
+import useFiltrationTasks from "../redux/hooks/useFiltrationTasks";
 
 const ToDoList = () => {
-  const {taskValue} = useSelector((store) => store.tasks);
-  // console.log(taskValue);
+  const filteredTasks = useFiltrationTasks()
 
   return (
     <div className="tasks-list">
-      {taskValue.length === 0 && <h1>Пусто 🤷🏼‍♂️</h1>}
-      {taskValue.map((item) => (
+      {filteredTasks.length === 0 && <h1>Пусто 🤷🏼‍♂️</h1>}
+      {filteredTasks.map((item) => (
         <Task key={item.id} task={item} />
       ))}
     </div>

@@ -63,9 +63,9 @@ export const clearCompetedTask = () => {
   };
 };
 
-export const filterTasks = (filter) => {
+export const filterTasks = (filteredTasks) => {
   return {
     type: "filterTasks",
-    payload: filter,
+    payload: filteredTasks,
   };
 };

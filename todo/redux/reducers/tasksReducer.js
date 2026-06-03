@@ -1,7 +1,7 @@
 const initialValue = {
   taskValue: [],
-  filteredTask: ['asd'],
   error: "",
+  filter: "all",
 };
 
 const tasksReducer = (state = initialValue, action) => {
@@ -59,10 +59,7 @@ const tasksReducer = (state = initialValue, action) => {
     case "filterTasks":
       return {
         ...state,
-        filteredTask: ()=>{
-          
-        },
-        
+        filter: action.payload,
       };
     default:
       return state;
