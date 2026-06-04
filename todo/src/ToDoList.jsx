@@ -1,4 +1,4 @@
-import Task from "./Task";
+import TaskWithLog from "./Task";
 import useFiltrationTasks from "../redux/hooks/useFiltrationTasks";
 
 const ToDoList = () => {
@@ -8,7 +8,7 @@ const ToDoList = () => {
     <div className="tasks-list">
       {filteredTasks.length === 0 && <h1>Пусто 🤷🏼‍♂️</h1>}
       {filteredTasks.map((item) => (
-        <Task key={item.id} task={item} />
+        <TaskWithLog key={item.id} task={item} />
       ))}
     </div>
   );

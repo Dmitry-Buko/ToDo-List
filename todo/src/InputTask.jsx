@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-// import { useTodo } from "../provider/ToDoContext";
 import { useSelector, useDispatch } from "react-redux";
 import {
   inputText,
@@ -9,7 +8,7 @@ import {
 } from "../redux/actions/inputTextActions";
 import { addTitle } from "../redux/actions/tasksActions";
 
-const InputTask = () => {
+const InputTask = (props) => {
   const dispatch = useDispatch();
   const { inputValue, errorSpace } = useSelector((store) => store.text);
 
@@ -21,9 +20,10 @@ const InputTask = () => {
         return;
       }
       dispatch(addTitle(inputValue));
+      props.logActions("addTitle");
       dispatch(inputZero());
     },
-    [dispatch, inputValue],
+    [dispatch, inputValue, props],
   );
 
   const handleChange = (text) => {

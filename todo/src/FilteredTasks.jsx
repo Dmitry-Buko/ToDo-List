@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTodo } from "../provider/ToDoContext";
 import { clearCompetedTask, filterTasks } from "../redux/actions/tasksActions";
 
-const FilteredTasks = () => {
+const FilteredTasks = (props) => {
   const { activeCount } = useTodo();
   const dispatch = useDispatch();
   const { filter } = useSelector((store) => store.tasks);
@@ -33,7 +33,10 @@ const FilteredTasks = () => {
         <p className="todo__counter">Осталось дел: {activeCount}</p>
         <button
           className="todo__clear-completed"
-          onClick={() => dispatch(clearCompetedTask())}
+          onClick={() => {
+            dispatch(clearCompetedTask());
+            props.logActions("clearCompetedTask");
+          }}
         >
           Очистить выполненные
         </button>

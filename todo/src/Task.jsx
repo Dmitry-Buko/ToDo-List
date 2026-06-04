@@ -1,8 +1,16 @@
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTitle, editTitle, errorMessage, setErrorToZero, togglerTask } from "../redux/actions/tasksActions";
+import {
+  deleteTitle,
+  editTitle,
+  errorMessage,
+  setErrorToZero,
+  togglerTask,
+} from "../redux/actions/tasksActions";
+import withLogger from "../hoc/withLogger";
 
-const Task = ({ task }) => {
+const Task = (props) => {
+  const { task, logActions } = props;
 
   const { error } = useSelector((store) => store.tasks);
   const dispatch = useDispatch();
@@ -17,7 +25,7 @@ const Task = ({ task }) => {
       dispatch(editTitle(task.id, text));
       setIsEdit(false);
     },
-    [ task.id, dispatch],
+    [task.id, dispatch],
   );
 
   const handleKeyDown = (e) => {
@@ -45,7 +53,10 @@ const Task = ({ task }) => {
         type="checkbox"
         className="task__checkbox"
         checked={task.isDone}
-        onChange={() => dispatch(togglerTask(task.id))}
+        onChange={() => {
+          dispatch(togglerTask(task.id));
+          logActions('togglerTask')
+        }}
       />
 
       <div className="task__content">
@@ -80,7 +91,10 @@ const Task = ({ task }) => {
           {isEdit ? "Сохранить ✅" : "Изменить ✍️"}
         </button>
         <button
-          onClick={() => dispatch(deleteTitle(task.id))}
+          onClick={() => {
+            dispatch(deleteTitle(task.id));
+            logActions("deleteTitle");
+          }}
           className="task__btn--delete"
         >
           Удалить 🗑
@@ -90,4 +104,6 @@ const Task = ({ task }) => {
   );
 };
 
-export default Task;
+const TaskWithLog = withLogger(Task);
+
+export default TaskWithLog;

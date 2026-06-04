@@ -1,32 +1,18 @@
 const withLogger = (WrappedComponent) => {
   return (props) => {
     const logActions = (actionType) => {
-      let message = "";
-      switch (actionType) {
-        case "fetchTasks":
-          message = "Задачи загружены";
-          break;
-        case "addTitle":
-          message = "Добавлена задача";
-          break;
-        case "deleteTitle":
-          message = "Задача удален";
-          break;
-        case "togglerTask":
-          message = "Изменен статус задачи";
-          break;
-        case "clearCompetedTask":
-          message = "Список выполненных задач очищен";
-          break;
-        default:
-          message = "Что-то произошло...";
-          break;
-      }
+      const messages = {
+        fetchTasks: "Задачи загружены",
+        addTitle: "Добавлена задача",
+        deleteTitle: "Задача удалена",
+        togglerTask: "Изменен статус задачи",
+        clearCompetedTask: "Список выполненных задач очищен",
+      };
+      const message = messages[actionType] || "Что-то произошло...";
       console.log(message);
-      
     };
 
-    <WrappedComponent {...props} logActions={logActions}/>;
+    return <WrappedComponent {...props} logActions={logActions} />;
   };
 };
 
