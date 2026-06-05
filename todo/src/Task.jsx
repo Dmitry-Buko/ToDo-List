@@ -23,9 +23,10 @@ const Task = (props) => {
         dispatch(errorMessage());
       }
       dispatch(editTitle(task.id, text));
+      logActions('editTitle')
       setIsEdit(false);
     },
-    [task.id, dispatch],
+    [task.id, dispatch, logActions],
   );
 
   const handleKeyDown = (e) => {

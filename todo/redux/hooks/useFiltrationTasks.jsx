@@ -2,7 +2,9 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 const useFiltrationTasks = () => {
-  const { taskValue = [], filter = "all" } = useSelector((store) => store.tasks);
+  const { taskValue = [], filter = "all" } = useSelector(
+    (store) => store.tasks,
+  );
 
   const filteredTasks = useMemo(() => {
     switch (filter) {
@@ -10,7 +12,6 @@ const useFiltrationTasks = () => {
         return taskValue.filter((task) => !task.isDone);
       case "completed":
         return taskValue.filter((task) => task.isDone);
-      case "all":
       default:
         return taskValue;
     }

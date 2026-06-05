@@ -6,7 +6,7 @@ const initialValue = {
 
 const tasksReducer = (state = initialValue, action) => {
   switch (action.type) {
-    case "errorMessage": //выбросить только ошибку
+    case "errorMessage":
       return {
         ...state,
         error: action.payload,
@@ -16,7 +16,7 @@ const tasksReducer = (state = initialValue, action) => {
         ...state,
         error: "",
       };
-    case "fetchTasks": //загрузка тасок с LS
+    case "fetchTasks":
       return {
         ...state,
         taskValue: action.payload,
