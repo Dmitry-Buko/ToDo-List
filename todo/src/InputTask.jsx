@@ -1,12 +1,7 @@
 import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  inputText,
-  inputError,
-  inputZero,
-  inputDeleteError,
-} from "../redux/actions/inputTextActions";
-import { addTitle } from "../redux/actions/tasksActions";
+import {change, inputError, detele_error, zero} from "../redux/slice/inputSlice";
+import { addTitle } from "../redux/slice/taskSlice";
 
 const InputTask = (props) => {
   const dispatch = useDispatch();
@@ -21,14 +16,14 @@ const InputTask = (props) => {
       }
       dispatch(addTitle(inputValue));
       props.logActions("addTitle");
-      dispatch(inputZero());
+      dispatch(zero());
     },
     [dispatch, inputValue, props],
   );
 
   const handleChange = (text) => {
-    dispatch(inputText(text));
-    dispatch(inputDeleteError());
+    dispatch(change(text));
+    dispatch(detele_error());
   };
 
   return (

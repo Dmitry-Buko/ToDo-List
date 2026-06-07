@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { ToDoContext } from "./ToDoContext";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "../redux/actions/tasksActions";
+import { fetchTasks } from "../redux/slice/taskSlice";
 
 export const ToDoProvider = ({ children }) => {
   const [filter, setFilter] = useState("all");

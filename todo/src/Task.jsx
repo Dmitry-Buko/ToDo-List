@@ -6,7 +6,7 @@ import {
   errorMessage,
   setErrorToZero,
   togglerTask,
-} from "../redux/actions/tasksActions";
+} from "../redux/slice/taskSlice";
 import withLogger from "../hoc/withLogger";
 
 const Task = (props) => {
@@ -21,8 +21,9 @@ const Task = (props) => {
     (text) => {
       if (!text.trim()) {
         dispatch(errorMessage());
+        return
       }
-      dispatch(editTitle(task.id, text));
+      dispatch(editTitle({id: task.id, text: text}));
       logActions('editTitle')
       setIsEdit(false);
     },

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useTodo } from "../provider/ToDoContext";
-import { clearCompetedTask, filterTasks } from "../redux/actions/tasksActions";
+import { clearCompetedTask, filterTasks } from "../redux/slice/taskSlice";
 
 const FilteredTasks = (props) => {
   const { activeCount } = useTodo();
